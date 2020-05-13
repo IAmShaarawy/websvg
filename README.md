@@ -1,5 +1,5 @@
 # websvg
-An algorithm for creating edged, chamfer. and filleet corners.
+An algorithm for creating edged, chamfer, and fillet corners.
 
 #### Corners Example:
 ![corners](./corners.jpeg "Corners Example")

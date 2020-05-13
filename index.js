@@ -5,8 +5,10 @@ let points = [
     { x: 100, y: 400, r: 10, type: NONE },
     { x: 100, y: 100, r: 80, type: FILLET },
     { x: 400, y: 100, r: 80, type: CHAMFER },
-    { x: 400, y: 400, r: 50, type: FILLET },
-    { x: 800, y: 200, r: 50, type: FILLET }];
+    { x: 400, y: 400, r: 70, type: FILLET },
+    { x: 600, y: 400, r: 100, type: NONE },
+    { x: 800, y: 200, r: 50, type: CHAMFER },
+    { x: 1000, y: 400, r: 50, type: CHAMFER }];
 
 function formPath(points) {
 
