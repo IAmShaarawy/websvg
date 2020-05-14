@@ -14,26 +14,17 @@ function formPath(points) {
             throw `The current point type ${currentPoint.type} is not handled`
         }
 
-        // if (i == points.length - 1) {
-        //     result = result.concat(formLine(currentPoint))
-        //     continue;
-        // }
-
-        if (currentPoint.type == NONE) {
-            result = result.concat(formLine(currentPoint), " ")
-            continue;
-        }
-
         const prePoint = i == 0 ? points[points.length - 1] : points[i - 1]
         const nextPoint = i < points.length - 1 ? points[i + 1] : points[0]
-
-        if (i > 1) {
-            prePrePoint = points[i - 2]
-        }
 
 
         if (i == 0) {
             result = result.concat(formInitPoint(prePoint, currentPoint, nextPoint), " ")
+            continue;
+        }
+
+        if (currentPoint.type == NONE) {
+            result = result.concat(formLine(currentPoint), " ")
             continue;
         }
 
@@ -52,8 +43,6 @@ function formPath(points) {
             continue
         }
     }
-    console.log(result);
-
     return result.concat(" Z");
 }
 
@@ -63,7 +52,7 @@ function findLastPointInPath(path) {
     const targetY = path.substr(firstSeperatorIndex + 1, path.length - 1)
     path = path.substring(0, firstSeperatorIndex)
     const secondSeperatorIndex = path.lastIndexOf(" ")
-    const targetX = path.substr(secondSeperatorIndex + 1, path.length - 1)    
+    const targetX = path.substr(secondSeperatorIndex + 1, path.length - 1)
     return { x: parseInt(targetX), y: parseInt(targetY) }
 }
 
@@ -76,20 +65,22 @@ function formLine(point) {
 }
 
 function formatArc(p, radius, sweep) {
-    return `A ${radius} ${radius} 0 0 ${sweep} ${p.x} ${p.y}`
+    return `A ${radius} ${radius} -45 0 ${sweep} ${p.x} ${p.y}`
 }
 
 function isValidChamferFillet(pathStopPoint, prePoint, currentPoint, nextPoint) {
-    // if (prePrePoint == null) {
-    //     return true
-    // }
     const tangentLength = tangentLinesLength(prePoint, currentPoint, nextPoint);
     const distance = distanceBetweenTwoPoints(pathStopPoint, currentPoint);
-    return  tangentLength <= distance
+    return tangentLength <= distance
 }
 
 function formInitPoint(prePoint, currentPoint, nextPoint) {
-    if (currentPoint.type == NONE) {
+    // check avaiaility to draw chamfer for fillet
+    const tangentLength = tangentLinesLength(prePoint, currentPoint, nextPoint)
+    const preDistance = distanceBetweenTwoPoints(currentPoint, prePoint)
+    const nextDistance = distanceBetweenTwoPoints(currentPoint, nextPoint)
+    const distance = preDistance > nextDistance ? nextDistance : preDistance
+    if (currentPoint.type == NONE || tangentLength > distance) {
         return formStartPoint(currentPoint)
     }
     const touchPoints = touchCirclePoints(prePoint, currentPoint, nextPoint)
@@ -115,13 +106,6 @@ function formChamfer(prePoint, currentPoint, nextPoint) {
 }
 
 function formFillet(prePoint, currentPoint, nextPoint) {
-    // const angle = angleBetweenTwoLines(prePoint, currentPoint, nextPoint)
-
-    // //this condition to avoid Fillet in straight lines
-    // if (angle == 180 || angle == 0) {
-    //     return formLine(currentPoint)
-    // }
-
     const touchPoints = touchCirclePoints(prePoint, currentPoint, nextPoint)
     const startPoint = touchPoints[0]
     const endPoint = touchPoints[1]
@@ -132,16 +116,10 @@ function formFillet(prePoint, currentPoint, nextPoint) {
 }
 
 function isArcReversed(prePoint, currentPoint, nextPoint) {
-    if (currentPoint.r == 30) {
-        console.log(prePoint.x - currentPoint.x > 0);
-        console.log(currentPoint.y - prePoint.y > 0);
-        console.log(currentPoint.x - nextPoint.x > 0);
-
-    }
-
-
-    // return prePoint.x - currentPoint.x > 0 || currentPoint.y - prePoint.y > 0 || currentPoint.x - nextPoint.x > 0
-    return false
+    const a = radianAngle(prePoint, currentPoint, nextPoint)
+    console.log(a);
+    
+    return a > Math.PI / 2
 }
 
 function angleBetweenTwoLines(line1Start, intersect, line2End) {
@@ -186,8 +164,8 @@ function touchCirclePoints(line1Start, intersect, line2End) {
 }
 
 let points = [
-    { x: 100, y: 400, r: 30, type: FILLET },
-    { x: 100, y: 100, r: 300, type: FILLET },
+    { x: 100, y: 800, r: 30, type: FILLET },
+    { x: 100, y: 100, r: 200, type: FILLET },
     { x: 400, y: 100, r: 20, type: FILLET },
     { x: 400, y: 300, r: 100, type: FILLET },
     { x: 600, y: 400, r: 40, type: FILLET },
@@ -195,9 +173,9 @@ let points = [
     { x: 1000, y: 400, r: 30, type: FILLET },
 ];
 
-let points1 = [{ x: 800, y: 200, r: 100, type: FILLET },
-{ x: 800, y: 800, r: 25, type: FILLET },
-{ x: 850, y: 250, r: 100, type: FILLET }]
+let points1 = [{ x: 800, y: 200, r: 29, type: FILLET },
+{ x: 800, y: 800, r: 10, type: FILLET },
+{ x: 850, y: 250, r: 25, type: FILLET }]
 
 let points2 = [
     { x: 100, y: 300, r: 10, type: FILLET },
@@ -220,8 +198,8 @@ let points4 = [{ x: 0, y: 50, r: 10, type: 'fillet' },
 
 const runPoints = points
 document.getElementById("pathId").setAttribute('d', formPath(runPoints))
-// document.getElementById("helperPath").setAttribute('d', formPath(runPoints.map((i) => {
-//     i.type = NONE
-//     return i
-// })))
+document.getElementById("helperPath").setAttribute('d', formPath(runPoints.map((i) => {
+    i.type = NONE
+    return i
+})))
 // document.getElementById("pathId").setAttribute('d', "M200,300 Q400,50 600,300")
