@@ -115,11 +115,14 @@ function formFillet(prePoint, currentPoint, nextPoint) {
     return formLine(startPoint).concat(" ", formatArc(endPoint, currentPoint.r, isReversed))
 }
 
+
 function isArcReversed(prePoint, currentPoint, nextPoint) {
-    const a = radianAngle(prePoint, currentPoint, nextPoint)
-    console.log(a);
-    
-    return a > Math.PI / 2
+    // find two victors 
+    const line1 = { x: currentPoint.x - prePoint.x, y: currentPoint.y - prePoint.y }
+    const line2 = { x: nextPoint.x - currentPoint.x, y: nextPoint.y - currentPoint.y }
+    // determin if the second vector is cw or ccw to the first one 
+    const c = line1.x*line2.y - line1.y*line2.x
+    return c<0
 }
 
 function angleBetweenTwoLines(line1Start, intersect, line2End) {
@@ -169,16 +172,16 @@ let points = [
     { x: 400, y: 100, r: 20, type: FILLET },
     { x: 400, y: 300, r: 100, type: FILLET },
     { x: 600, y: 400, r: 40, type: FILLET },
-    { x: 700, y: 200, r: 50, type: FILLET },
+    { x: 550, y: 200, r: 50, type: FILLET },
     { x: 1000, y: 400, r: 30, type: FILLET },
 ];
 
-let points1 = [{ x: 800, y: 200, r: 29, type: FILLET },
+let points1 = [{ x: 800, y: 200, r: 10, type: FILLET },
 { x: 800, y: 800, r: 10, type: FILLET },
 { x: 850, y: 250, r: 25, type: FILLET }]
 
 let points2 = [
-    { x: 100, y: 300, r: 10, type: FILLET },
+    { x: 100, y: 300, r: 50, type: FILLET },
     { x: 0, y: 0, r: 50, type: FILLET },
     { x: 300, y: 100, r: 80, type: FILLET }]
 
@@ -198,8 +201,11 @@ let points4 = [{ x: 0, y: 50, r: 10, type: 'fillet' },
 
 const runPoints = points
 document.getElementById("pathId").setAttribute('d', formPath(runPoints))
-document.getElementById("helperPath").setAttribute('d', formPath(runPoints.map((i) => {
-    i.type = NONE
-    return i
-})))
-// document.getElementById("pathId").setAttribute('d', "M200,300 Q400,50 600,300")
+// document.getElementById("helperPath1").setAttribute('d', formPath(runPoints.map((i) => {
+//     i.type = CHAMFER
+//     return i
+// })))
+// document.getElementById("helperPath2").setAttribute('d', formPath(runPoints.map((i) => {
+//     i.type = NONE
+//     return i
+// })))
