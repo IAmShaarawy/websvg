@@ -200,12 +200,12 @@ let points4 = [{ x: 0, y: 50, r: 10, type: 'fillet' },
 
 
 const runPoints = points
-document.getElementById("pathId").setAttribute('d', formPath(runPoints))
-// document.getElementById("helperPath1").setAttribute('d', formPath(runPoints.map((i) => {
+document.getElementById("path0").setAttribute('d', formPath(runPoints))
+// document.getElementById("path1").setAttribute('d', formPath(runPoints.map((i) => {
 //     i.type = CHAMFER
 //     return i
 // })))
-// document.getElementById("helperPath2").setAttribute('d', formPath(runPoints.map((i) => {
+// document.getElementById("path2").setAttribute('d', formPath(runPoints.map((i) => {
 //     i.type = NONE
 //     return i
 // })))
