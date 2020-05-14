@@ -1,6 +1,6 @@
-const NONE = 'none'
-const CHAMFER = 'chamfer'
-const FILLET = 'fillet'
+const NONE = 'NONE'
+const CHAMFER = 'CHAMFER'
+const FILLET = 'FILLET'
 
 
 function formPath(points) {
@@ -192,14 +192,36 @@ let points3 = [
     { x: 100, y: 0, r: 50, type: FILLET },]
 
 
-let points4 = [{ x: 0, y: 50, r: 10, type: 'fillet' },
+let points4 = [{ x: 0, y: 50, r: 10, type: FILLET },
 { x: 0, y: 120, r: 50, type: FILLET },
 { x: 100, y: 20, r: 10, type: FILLET },
 { x: 100, y: 0, r: 50, type: FILLET },]
 
+let points5 = [
+    { x: 0, y: 0, r: 30, type: 'FILLET' },
+    { x: 0, y: 100, r: 5000, type: 'NONE' },
+    { x: 100, y: 100, r: 20, type: 'FILLET' },
+    { x: 100, y: 0, r: 20, type: 'FILLET' }
+    
+];
+
+let points6 = [
+    { x: 0, y: 100, r: 30, type: 'FILLET' },
+    { x: 200, y: 100, r: 200, type: 'NONE' },
+    { x: 100, y: 0, r: 20, type: 'FILLET' }
+    
+];
+
+let points7 = [
+    { x: 0, y: 0, r: 30, type: 'FILLET' },
+    { x: 0, y: 500, r: 200, type: 'NONE' },
+    { x: 400, y: 100, r: 20, type: 'FILLET' }
+    
+];
 
 
-const runPoints = points
+
+const runPoints = points7
 document.getElementById("path0").setAttribute('d', formPath(runPoints))
 // document.getElementById("path1").setAttribute('d', formPath(runPoints.map((i) => {
 //     i.type = CHAMFER
