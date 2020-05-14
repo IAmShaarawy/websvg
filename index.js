@@ -220,8 +220,7 @@ let points7 = [
 ];
 
 
-
-const runPoints = points7
+const runPoints = points
 document.getElementById("path0").setAttribute('d', formPath(runPoints))
 // document.getElementById("path1").setAttribute('d', formPath(runPoints.map((i) => {
 //     i.type = CHAMFER
