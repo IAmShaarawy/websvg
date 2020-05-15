@@ -70,8 +70,11 @@ function formatArc(p, radius, sweep) {
 
 function isValidChamferFillet(pathStopPoint, prePoint, currentPoint, nextPoint) {
     const tangentLength = tangentLinesLength(prePoint, currentPoint, nextPoint);
-    const distance = distanceBetweenTwoPoints(pathStopPoint, currentPoint);
-    return tangentLength <= distance
+    const preDistance = distanceBetweenTwoPoints(pathStopPoint, currentPoint);
+    const nextDistance = distanceBetweenTwoPoints(currentPoint, nextPoint);
+    console.log(nextDistance);
+    
+    return tangentLength <= preDistance && tangentLength <= nextDistance
 }
 
 function formInitPoint(prePoint, currentPoint, nextPoint) {
@@ -219,8 +222,15 @@ let points7 = [
     
 ];
 
+let points8 = [
+    {x: -204.0000762939453, y: 128.4667205810547, r: 2.598585900156502, type: "FILLET"},
+    {x: 29.441020965576172, y: 128.4667205810547, r: 111.92566705719429, type: "FILLET"},
+    {x: 29.441020965576172, y: 215.46676635742188, r: 0, type: "FILLET"},
+    {x: -204.0000762939453, y: 215.46676635742188, r: 126.02787043259237, type: "FILLET"}
+]
 
-const runPoints = points
+
+const runPoints = points8
 document.getElementById("path0").setAttribute('d', formPath(runPoints))
 // document.getElementById("path1").setAttribute('d', formPath(runPoints.map((i) => {
 //     i.type = CHAMFER
